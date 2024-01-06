@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta name="viewport" content="width=device-width,initial-scale=1.0">
+    <title>Aniket chat</title>
+    <link rel="stylesheet" href="./client.css">
+  </head>
+  <body>
+    <ul id="messages"></ul>
+    <ul id="users">
+    </ul>
+    <form id="form" action="" onsubmit="send();return false">
+      <input id="input" autocomplete="off" />
+      <button id="sub" >Send</button>
+    </form>
+
+    <script src="https://cdn.socket.io/4.7.2/socket.io.min.js"></script>
+    <script src="app.js">
+    </script>
+  </body>
+</html>
+
+<!-- TODO 1) Enable Authenticatoin -->

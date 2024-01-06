@@ -1,3 +1,1 @@
-interval = setInterval(()=>{
-    console.log("hello")
-},2000)
+let a=["aniket","amit","abhishek"]
