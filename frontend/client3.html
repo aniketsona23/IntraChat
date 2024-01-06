@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta name="viewport" content="width=device-width,initial-scale=1.0">
+    <title>Abhishek chat</title>
+    <link rel="stylesheet" href="./client.css">
+  </head>
+  <body>
+    <ul id="messages"></ul>
+    <form id="form" action="" onsubmit="send();return false">
+      <input id="input" autocomplete="off" />
+      <button id="sub" >Send</button>
+    </form>
+
+    <script src="https://cdn.socket.io/4.7.2/socket.io.min.js"></script>
+    <script>
+        const socket = io()
+        let user = {name : "Abhishek", id:""}
+        let userslist = []
+
+        // connection with server
+        socket.on('connect', function(){
+            socket.emit("register",user)
+            socket.on("register",function(userwithid){
+              user= userwithid
+            })
+          
+            console.log('Connected to Server')
+          });
+        
+        // Update Users List
+        socket.on("updateUser",function(usersList,msg){
+          console.log(msg);
+          userslist = usersList;
+          console.log(userslist)
+        })
+
+        // emits message from user side
+        function send(){
+          var value = document.getElementById("input")
+          socket.emit("fromUser",{from:user,to:{name:"Amit",id:""},msg:value.value})
+          value.value = ""
+        }
+        
+        // message listener from server
+        socket.on('fromServer', function(message){
+              console.log(`${message.from.name} : ${message.msg}`)
+          });
+        
+        // when disconnected from server
+        socket.on('disconnect', function(){
+            console.log('Disconnect from server')
+          });
+
+    </script>
+  </body>
+</html>
