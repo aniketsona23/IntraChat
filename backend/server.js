@@ -4,7 +4,7 @@ const http=require('http')
 const port=process.env.PORT||3000
 const path = require("path")
 
-var app=express();
+var app=express();  
 let server = http.createServer(app);
 var io=socketIO(server);
 
@@ -16,15 +16,17 @@ let users ={}
 // make connection with user from server side
 io.on('connection', (socket)=>{
   let userid = socket.id
+  let username = ""
 
   socket.on("register",(user)=>{
     
     user.id = userid
+    username = user.name
     users[user.name]=userid
     console.log(`${user.name} / ${userid}  Connected`)
     
-    socket.emit("register",user);
     socket.broadcast.emit("updateUser",[users,`${user.name}/ ${userid} Connected to Server !`])
+    socket.emit("register",user);
 
     console.log(users)
   })
@@ -42,22 +44,19 @@ io.on('connection', (socket)=>{
 
   // when server disconnects from user
   socket.on('disconnect', ()=>{
-  	console.log('disconnected from '+users.userid);
+  	console.log('disconnected from '+username);
+    delete users[username];
+    socket.broadcast.emit("updateUser",[users,`${username}/ ${userid} disconnected !`])
+
+
   });
   
 });
 
-app.get("/client1", (req, res) => {
-  res.sendFile(path.join(__dirname,"../frontend/client1.html"));
+app.get("/", (req, res) => {
+  res.sendFile(path.join(__dirname,"../frontend/login.html"));
 });
 
-app.get("/client2", (req, res) => {
-  res.sendFile(path.join(__dirname,"../frontend/client2.html"));
-});
-
-app.get("/client3", (req, res) => {
-  res.sendFile(path.join(__dirname,"../frontend/client3.html"));
-});
 
 server.listen(port,()=>{
   console.log("Server started on http://localhost:"+port)
