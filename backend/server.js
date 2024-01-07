@@ -1,63 +1,65 @@
-const express=require('express');
-const socketIO=require('socket.io');
-const http=require('http')
-const port=process.env.PORT||3000
-const path = require("path")
+const express = require("express");
+const socketIO = require("socket.io");
+const http = require("http");
+const path = require("path");
 
-var app=express();  
+const port = process.env.PORT || 3000;
+let app = express();
+app.use(express.static(path.join(__dirname, "../frontend")));
+
 let server = http.createServer(app);
-var io=socketIO(server);
+let io = socketIO(server);
 
-app.use(express.static(path.join(__dirname,"../frontend")))
-
-let users ={}
-
+let allUsers = {};
 
 // make connection with user from server side
-io.on('connection', (socket)=>{
-  let userid = socket.id
-  let username = ""
+io.on("connection", (socket) => {
+  const userid = socket.id;
+  let username = "";
 
-  socket.on("register",(user)=>{
-    
-    user.id = userid
-    username = user.name
-    users[user.name]=userid
-    console.log(`${user.name} / ${userid}  Connected`)
-    
-    socket.broadcast.emit("updateUser",[users,`${user.name}/ ${userid} Connected to Server !`])
-    socket.emit("register",user);
+  // Registering new User
+  socket.on("register", (newusername) => {
+    username = newusername;
+    allUsers[username] = userid;
 
-    console.log(users)
-  })
+    console.log(`[+] ${username} / ${userid}  Connected`);
+
+    //Tell other users new user joined
+    socket.broadcast.emit(
+      "updateUser",
+      Object.keys(allUsers),
+      `${username} Connected to Server !`
+    );
+
+    socket.emit("updateUser", Object.keys(allUsers), "Welcome to IntraChat !");
+  });
 
   // listen for message from user
-  socket.on('fromUser', (newMessage)=>{
-    const recipent  = newMessage.to.name
-    const recipentId = users[recipent]
+  socket.on("fromUser", (newMessage) => {
+    const recipentName = newMessage.to;
+    const recipentId = allUsers[recipentName];
 
-    console.log(users)
-    io.to(recipentId).emit("fromServer",newMessage)
-    console.log( `${newMessage.from.name} : ${newMessage.msg}`);
+    io.to(recipentId).emit("fromServer", newMessage);
   });
-  
 
   // when server disconnects from user
-  socket.on('disconnect', ()=>{
-  	console.log('disconnected from '+username);
-    delete users[username];
-    socket.broadcast.emit("updateUser",[users,`${username}/ ${userid} disconnected !`])
+  socket.on("disconnect", () => {
+    console.log("disconnected from " + username);
+    delete allUsers[username];
 
-
+    // Tell other users  user disconnected
+    socket.broadcast.emit(
+      "updateUser",
+      Object.keys(allUsers),
+      `${username} disconnected !`
+    );
   });
-  
 });
 
 app.get("/", (req, res) => {
-  res.sendFile(path.join(__dirname,"../frontend/login.html"));
+  res.sendFile(path.join(__dirname, "../frontend/login.html"));
 });
 
-
-server.listen(port,()=>{
-  console.log("Server started on http://localhost:"+port)
+server.listen(port, () => {
+  console.log(`Server started on http://localhost:${port}\n`);
 });
