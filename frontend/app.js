@@ -12,8 +12,7 @@ const userDisplayContainer = document.getElementById("users");
 // function to delete all radio buttons
 function deleteOptions() {
   usersDisplayList.forEach((element) => {
-    userDisplayContainer.removeChild(element[0]);
-    userDisplayContainer.removeChild(element[1]);
+    userDisplayContainer.removeChild(element);
   });
   usersDisplayList = [];
 }
@@ -21,21 +20,27 @@ function deleteOptions() {
 // function to create radio buttons for active users
 function addOptions(userlist) {
   for (let i = 0; i < userlist.length; i++) {
+    let tempContainer = document.createElement("div");
     var rads = document.createElement("input");
     rads.setAttribute("type", "radio");
     rads.setAttribute("name", "client");
     rads.setAttribute("id", "client" + (i + 1));
     rads.setAttribute("value", userlist[i]);
-    userDisplayContainer.appendChild(rads);
+    tempContainer.appendChild(rads);
 
     var labels = document.createElement("label");
     labels.setAttribute("class", "clientlabel");
     labels.setAttribute("for", "client" + (i + 1));
     labels.innerHTML = userlist[i];
 
-    userDisplayContainer.appendChild(labels);
+    tempContainer.appendChild(labels);
+    tempContainer.setAttribute("class", "user-radio");
 
-    usersDisplayList.push([rads, labels]);
+    userDisplayContainer.appendChild(tempContainer);
+    usersDisplayList.push(tempContainer);
+  }
+  if (usersDisplayList.length) {
+    document.getElementById("client1").checked = true;
   }
 }
 
@@ -54,11 +59,6 @@ socket.on("connect", function () {
   document.title = activeusername;
 
   console.log("Connected to Server");
-});
-
-socket.on("register", function (oldusernames) {
-  otherUsersNames = oldusernames;
-  updateOptions(otherUsersNames);
 });
 
 // Update Users List
@@ -83,8 +83,9 @@ function send() {
 
 // message listener from server
 socket.on("fromServer", function (message) {
-  alert(`${message.from} : ${message.msg}`);
-  console.log(`${message.from} : ${message.msg}`);
+  const newmsg = document.createElement("li");
+  newmsg.innerHTML = `${message.from} : ${message.msg}`;
+  messagesDisplay.appendChild(newmsg);
 });
 
 // when disconnected from server
