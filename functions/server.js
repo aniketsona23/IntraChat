@@ -1,19 +1,23 @@
 require("dotenv").config();
 
+import { express, Router } from "express";
+import serverless from "serverless-http";
+
 const bodyParser = require("body-parser"); // Middleware
 
-const express = require("express");
 const socketIO = require("socket.io");
 const http = require("http");
 const path = require("path");
 const mognoose = require("mongoose");
 const { default: mongoose } = require("mongoose");
-const User = require("./modals/userSchema");
+const User = require("../modals/userSchema");
 const port = process.env.PORT || 3000;
+const router = Router();
 
 let app = express();
 app.use(express.static(path.join(__dirname, "/frontend")));
 app.use(bodyParser.urlencoded({ extended: false }));
+app.user();
 
 let server = http.createServer(app);
 let io = socketIO(server);
@@ -64,6 +68,14 @@ io.on("connection", (socket) => {
   });
 });
 
+router.get("/", (req, res) => {
+  res.sendFile(path.join(__dirname, "/frontend/login.html"));
+});
+
+app.use("/.netlify/functions/", router);
+
+export const handler = serverless(app);
+
 mongoose
   .connect(process.env.DB_URI)
   .then(() => {
@@ -76,10 +88,6 @@ mongoose
   .catch((err) => {
     console.log("[-] Error : " + err);
   });
-
-app.get("/", (req, res) => {
-  res.sendFile(path.join(__dirname, "/frontend/login.html"));
-});
 
 // app.post("/", async (req, res) => {
 //   const userdata = await User.find({});
