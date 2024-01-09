@@ -37,15 +37,12 @@
 <p>Further optimizations will be done before converting the codebase to React and adding database functionality to store old messages.</p>
 
 <h2>Connect !</h2>
-<div display="flex">
-  <a href="mailto:aniket.sonawane1734.gmail.com" target=_blank>
+<a href="mailto:aniket.sonawane1734.gmail.com" target=_blank>
     
-    ![Gmail](https://img.shields.io/badge/Gmail-D14836?style=for-the-badge&logo=gmail&logoColor=white)
+  ![Gmail](https://img.shields.io/badge/Gmail-D14836?style=for-the-badge&logo=gmail&logoColor=white)
     
-  </a>
-  <a href="https://www.linkedin.com/in/aniket-sonawane-3a87b9249/" target=_blank>
+</a>
+<a href="https://www.linkedin.com/in/aniket-sonawane-3a87b9249/" target=_blank>
   
-    ![LinkedIn](https://img.shields.io/badge/linkedin-%230077B5.svg?style=for-the-badge&logo=linkedin&logoColor=white)
-    
+  ![LinkedIn](https://img.shields.io/badge/linkedin-%230077B5.svg?style=for-the-badge&logo=linkedin&logoColor=white)
   </a>
-</div>

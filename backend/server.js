@@ -1,11 +1,19 @@
+require("dotenv").config();
+
+const bodyParser = require("body-parser"); // Middleware
+
 const express = require("express");
 const socketIO = require("socket.io");
 const http = require("http");
 const path = require("path");
-
+const mognoose = require("mongoose");
+const { default: mongoose } = require("mongoose");
+const User = require("./modals/userSchema");
 const port = process.env.PORT || 3000;
+
 let app = express();
-app.use(express.static(path.join(__dirname, "../frontend")));
+app.use(express.static(path.join(__dirname, "/frontend")));
+app.use(bodyParser.urlencoded({ extended: false }));
 
 let server = http.createServer(app);
 let io = socketIO(server);
@@ -56,10 +64,30 @@ io.on("connection", (socket) => {
   });
 });
 
+mongoose
+  .connect(process.env.DB_URI)
+  .then(() => {
+    console.log("[+] Connected to Database.");
+
+    server.listen(port, () => {
+      console.log(`Server started on http://localhost:${port}/\n`);
+    });
+  })
+  .catch((err) => {
+    console.log("[-] Error : " + err);
+  });
+
 app.get("/", (req, res) => {
-  res.sendFile(path.join(__dirname, "../frontend/login.html"));
+  res.sendFile(path.join(__dirname, "/frontend/login.html"));
 });
 
-server.listen(port, () => {
-  console.log(`Server started on http://localhost:${port}\n`);
-});
+// app.post("/", async (req, res) => {
+//   const userdata = await User.find({});
+//   console.log(userdata);
+//   const { username, password } = req.body;
+//   res.redirect(`/user/${username}/password/${password}`);
+// });
+
+// app.get("/user/:username", (req, res) => {
+//   res.sendFile(path.join(__dirname, "../frontend/client.html"));
+// });
