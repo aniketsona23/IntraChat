@@ -24,7 +24,7 @@
     npx nodemon server.js
 
   
-  <li>Now open browser and connect to server wwith multiple tabs (clients) with "http://localhost:3000"</li>
+  <li>Now open browser and connect to server wwith multiple tabs (clients) with "http://localhost:3010"</li>
   
   <li>After logging in you will see list of active users, select user you want to send message to.</li>
 </ol>

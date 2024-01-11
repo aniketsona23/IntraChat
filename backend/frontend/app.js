@@ -1,8 +1,9 @@
 
 const socket = io();
-
+console.log("hello")
 const urlParams = new URLSearchParams(window.location.search);
-const activeusername = urlParams.get("username");
+console.log(urlParams,"hello")
+const activeUsername = urlParams.get("username");
 
 let otherUsersNames = [];
 let usersDisplayList = [];
@@ -46,8 +47,8 @@ function addOptions(userslist) {
 }
 
 function updateOptions(userslist) {
-  if (userslist.includes(activeusername)) {
-    let userindex = userslist.indexOf(activeusername);
+  if (userslist.includes(activeUsername)) {
+    let userindex = userslist.indexOf(activeUsername);
     userslist.splice(userindex, 1);
   }
   deleteOptions();
@@ -59,7 +60,7 @@ function sendMessage() {
   const toName = document.querySelector("input[name='client']:checked").value;
 
   socket.emit("fromUser", {
-    from: activeusername,
+    from: activeUsername,
     to: toName,
     msg: messageBox.value,
   });
@@ -70,14 +71,11 @@ function sendMessage() {
 
 // connection with server
 socket.on("connect", function () {
-  if (!activeusername) {
-    window.location = "http://localhost:3000/auth";
-  } else {
-    socket.emit("register", activeusername);
-    document.title = activeusername;
+    socket.emit("register", activeUsername);
+    document.title = activeUsername;
 
     console.log("Connected to Server");
-  }
+  
 });
 
 // Update Users List

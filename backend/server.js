@@ -1,19 +1,20 @@
 require("dotenv").config();
 
 
-const socketHandle = require("./socketHandler.js")
 const express = require("express")
 const serverless = require("serverless-http")
-const http = require("http");
+const http = require("http")
 const path = require("path");
-const User = require("./modals/userSchema");
-const router = require("./routes/router.js");
+const router = require("./routes/route.js");
+const socketHandle = require("./sockets/socketHandler.js")
 const startServer = require("./serverStart.js");
+const bodyParser = require("body-parser")
 
 const app = express();
 const server = http.createServer(app);
 const io = socketHandle(server);
 
+app.use(bodyParser.urlencoded({ extended: true }));
 app.use(express.static(path.join(__dirname, "/frontend")));
 app.use("/",router)
 
