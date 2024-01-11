@@ -1,3 +1,4 @@
+
 const socket = io();
 
 const urlParams = new URLSearchParams(window.location.search);
@@ -18,20 +19,20 @@ function deleteOptions() {
 }
 
 // function to create radio buttons for active users
-function addOptions(userlist) {
-  for (let i = 0; i < userlist.length; i++) {
+function addOptions(userslist) {
+  for (let i = 0; i < userslist.length; i++) {
     let tempContainer = document.createElement("div");
     var rads = document.createElement("input");
     rads.setAttribute("type", "radio");
     rads.setAttribute("name", "client");
     rads.setAttribute("id", "client" + (i + 1));
-    rads.setAttribute("value", userlist[i]);
+    rads.setAttribute("value", userslist[i]);
     tempContainer.appendChild(rads);
 
     var labels = document.createElement("label");
     labels.setAttribute("class", "clientlabel");
     labels.setAttribute("for", "client" + (i + 1));
-    labels.innerHTML = userlist[i];
+    labels.innerHTML = userslist[i];
 
     tempContainer.appendChild(labels);
     tempContainer.setAttribute("class", "user-radio");
@@ -40,7 +41,7 @@ function addOptions(userlist) {
     usersDisplayList.push(tempContainer);
   }
   if (usersDisplayList.length) {
-    document.getElementById("client1").checked = true;
+    document.getElementById("client1").checked = true;// Check the first radio button
   }
 }
 
@@ -52,6 +53,20 @@ function updateOptions(userslist) {
   deleteOptions();
   addOptions(userslist);
 }
+
+function sendMessage() {
+  var messageBox = document.getElementById("input");
+  const toName = document.querySelector("input[name='client']:checked").value;
+
+  socket.emit("fromUser", {
+    from: activeusername,
+    to: toName,
+    msg: messageBox.value,
+  });
+  messageBox.value = "";
+}
+
+
 
 // connection with server
 socket.on("connect", function () {
@@ -72,18 +87,7 @@ socket.on("updateUser", function (usersList, msg) {
   console.log(msg);
 });
 
-// emits message from activeusername side
-function send() {
-  var messageBox = document.getElementById("input");
-  const toName = document.querySelector("input[name='client']:checked").value;
 
-  socket.emit("fromUser", {
-    from: activeusername,
-    to: toName,
-    msg: messageBox.value,
-  });
-  messageBox.value = "";
-}
 
 // message listener from server
 socket.on("fromServer", function (message) {
