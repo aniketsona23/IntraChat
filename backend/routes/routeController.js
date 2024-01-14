@@ -12,10 +12,10 @@ function chatPage(req,res){
 async function loginHandler(req,res){
     const {username,password} =req.body
     const users = await User.findOne({username:username})
-    console.log(username,password)
+    console.log(await User.find({}))
   
     if (!users || users.password !=password){
-        res.status(404).send(`<h1>Invalid Username or Password</h1><a href="http://localhost:3010/">Go back to login</a>"`)
+        res.status(404).send(`<h1>Invalid Username or Password</h1><a href="/">Go back to login</a>`)
     }
     
     else{
@@ -23,4 +23,17 @@ async function loginHandler(req,res){
     }
 }
 
-module.exports = {loginPage ,loginHandler , chatPage}
+async function registerHandler(req,res){
+    const {username, password}= req.body
+    const users = await User.create({username,password})
+    
+    if (!users ){
+        res.status(404).send(`<h1>Registration Failed</h1><a href="http://localhost:3010/">Go back to login</a>`)
+    }
+    
+    else{
+        res.redirect(`/`)
+    }
+}
+
+module.exports = {loginPage ,loginHandler , chatPage,registerHandler}

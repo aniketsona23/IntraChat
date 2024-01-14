@@ -4,22 +4,22 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="login.css">
-    <title>Login Page</title>
+    <title>Register Page</title>
     <link rel="shortcut icon" href="#">
 </head>
 <body>
     <div class="video-bg">
         <video src=""></video>
     </div>
-    <div class="login-container">
+    <div class="register-container">
         <header>
-            <h1>Login </h1>
+            <h1>Register </h1>
         </header>
-        <form action="/auth/login" class="login-form" method="post">
+        <form action="/auth/register" class="register-form" method="post">
             <div class="form-input-box">
                 <img width="48" height="48" src="https://img.icons8.com/material-sharp/48/FFFFFF/user.png" alt="user"/>
                 <div class="form-input">
-                    <input type="text" placeholder=" " name="username" id="username" required>
+                    <input type="text" placeholder=" " name="username" id="username"  required>
                     <label for="username">Username</label>
                 </div>
             </div>
@@ -30,8 +30,7 @@
                     <label for="password">Password</label>
                 </div>
             </div>
-            <button type="submit" id="submit-btn">Login</button>
-            <a href="register.html">Register</a>
+            <button type="submit" id="submit-btn">Register</button>
         </form>
     </div>
 </body>

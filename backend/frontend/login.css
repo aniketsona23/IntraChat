@@ -13,7 +13,7 @@ body {
   background-repeat: no-repeat;
   backdrop-filter: blur(1px);
 }
-.login-container {
+.login-container , .register-container{
   display: flex;
   flex-direction: column;
   align-items: center;
