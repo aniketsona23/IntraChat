@@ -12,9 +12,10 @@ function chatPage(req,res){
 async function loginHandler(req,res){
     const {username,password} =req.body
     const users = await User.findOne({username:username})
+    console.log(username,password)
   
     if (!users || users.password !=password){
-        res.status(404).send(`<h1>Invalid Username or Password</h1>`)
+        res.status(404).send(`<h1>Invalid Username or Password</h1><a href="http://localhost:3010/">Go back to login</a>"`)
     }
     
     else{

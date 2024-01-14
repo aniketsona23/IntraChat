@@ -1,15 +1,37 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="login.css">
     <title>Login Page</title>
-  </head>
-  <body>
-    <form id="loginForm" action="/auth/login" method="post">
-      <input type="text" name="username" id="username" />
-      <input type="password" name="password" id="password" />
-      <button>Submit</button>
-    </form>
-  </body>
+    <link rel="shortcut icon" href="#">
+</head>
+<body>
+    <div class="video-bg">
+        <video src=""></video>
+    </div>
+    <div class="login-container">
+        <header>
+            <h1>Login </h1>
+        </header>
+        <form action="/auth/login" class="login-form" method="post">
+            <div class="form-input-box">
+                <img width="48" height="48" src="https://img.icons8.com/material-sharp/48/FFFFFF/user.png" alt="user"/>
+                <div class="form-input">
+                    <input type="text" placeholder=" " name="username" id="username">
+                    <label for="username">Username</label>
+                </div>
+            </div>
+            <div class="form-input-box">
+                <img width="50" height="50" src="https://img.icons8.com/ios-filled/50/FFFFFF/password.png" alt="password"/>
+                <div class="form-input">
+                    <input type="password" placeholder=" " type="passwor" name="password" id="password">
+                    <label for="password">Password</label>
+                </div>
+            </div>
+            <button type="submit" id="submit-btn">Login</button>
+        </form>
+    </div>
+</body>
 </html>
