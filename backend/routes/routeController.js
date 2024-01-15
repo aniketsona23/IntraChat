@@ -12,7 +12,6 @@ function chatPage(req,res){
 async function loginHandler(req,res){
     const {username,password} =req.body
     const users = await User.findOne({username:username})
-    console.log(await User.find({}))
   
     if (!users || users.password !=password){
         res.status(404).send(`<h1>Invalid Username or Password</h1><a href="/">Go back to login</a>`)
@@ -25,8 +24,9 @@ async function loginHandler(req,res){
 
 async function registerHandler(req,res){
     const {username, password}= req.body
-    const check = await User.find({username:username})
-    if (!check.length){
+    const check = await User.findOne({username:username})
+
+    if (!check){
         const users = await User.create({username,password})
         if (!users ){
             res.status(404).send(`<h1>Registration Failed</h1><a href="http://localhost:3010/">Go back to login</a>`)

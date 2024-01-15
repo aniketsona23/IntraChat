@@ -11,9 +11,8 @@ const userSchema = new Schema({
     required: true,
   },
   messages:{
-    fromMe:Array,
-    toMe:Array
+    type:Array
   }
 });
 
-module.exports = mongoose.model("User", userSchema,"user");
+module.exports = mongoose.model("User", userSchema,"intrachat");

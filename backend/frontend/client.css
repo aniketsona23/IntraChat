@@ -52,6 +52,13 @@ body {
   background: #efefef;
 }
 
+#messages .from-user{
+  text-align: end;
+}
+
+#messages .to-user{
+  align-items: start;
+}
 #users {
   display: flex;
   margin: 0px;
@@ -59,3 +66,4 @@ body {
 .user-radio {
   margin: 2px 10px;
 }
+

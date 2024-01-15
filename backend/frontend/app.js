@@ -1,4 +1,3 @@
-
 const socket = io();
 
 const urlParams = new URLSearchParams(window.location.search);
@@ -20,31 +19,32 @@ function deleteOptions() {
 
 // function to create radio buttons for active users
 function addOptions(userslist) {
-  for (let i = 0; i < userslist.length; i++) {
-    let tempContainer = document.createElement("div");
-    var rads = document.createElement("input");
+  userslist.forEach((user)=> {
+    const tempContainer = document.createElement("div");
+    const rads = document.createElement("input");
     rads.setAttribute("type", "radio");
     rads.setAttribute("name", "client");
-    rads.setAttribute("id", "client" + (i + 1));
-    rads.setAttribute("value", userslist[i]);
-    tempContainer.appendChild(rads);
-
-    var labels = document.createElement("label");
+    rads.setAttribute("id", user);
+    rads.setAttribute("value", user);
+    
+    const labels = document.createElement("label");
     labels.setAttribute("class", "clientlabel");
-    labels.setAttribute("for", "client" + (i + 1));
-    labels.innerHTML = userslist[i];
-
+    labels.setAttribute("for", user);
+    labels.innerHTML = user;
+    
+    tempContainer.appendChild(rads);
     tempContainer.appendChild(labels);
     tempContainer.setAttribute("class", "user-radio");
 
     userDisplayContainer.appendChild(tempContainer);
     usersDisplayList.push(tempContainer);
-  }
+  })
   if (usersDisplayList.length) {
-    document.getElementById("client1").checked = true;// Check the first radio button
+    document.getElementsByName("client")[0].checked = true;// Check the first radio button
   }
 }
 
+// Function to update active users 
 function updateOptions(userslist) {
   if (userslist.includes(activeUsername)) {
     let userindex = userslist.indexOf(activeUsername);
@@ -54,18 +54,37 @@ function updateOptions(userslist) {
   addOptions(userslist);
 }
 
+// Function to send Message
 function sendMessage() {
   var messageBox = document.getElementById("input");
   const toName = document.querySelector("input[name='client']:checked").value;
-
-  socket.emit("fromUser", {
-    from: activeUsername,
+  const msg = {
+    from:activeUsername,
     to: toName,
     msg: messageBox.value,
-  });
+  }
+  socket.emit("fromUser", msg);
+  displayMessage(msg)
+
   messageBox.value = "";
 }
 
+// Display message on website
+function displayMessage(message){
+  const newmsg = document.createElement("li");
+
+  
+  if (message.to === activeUsername ){// Display as incoming messages
+    newmsg.setAttribute("class","to-user")
+    newmsg.innerHTML = `${message.from} : ${message.msg}`;
+  }
+  
+  else {// Display as outgoing messages
+    newmsg.setAttribute("class","from-user")
+    newmsg.innerHTML = `${message.msg} > ${message.to}`;
+  }
+    messagesDisplay.appendChild(newmsg);
+}
 
 
 // connection with server
@@ -87,10 +106,9 @@ socket.on("updateUser", function (usersList, msg) {
 
 
 // message listener from server
-socket.on("fromServer", function (message) {
-  const newmsg = document.createElement("li");
-  newmsg.innerHTML = `${message.from} : ${message.msg}`;
-  messagesDisplay.appendChild(newmsg);
+socket.on("fromServer", function(messages){
+  if (messages.length)
+    messages.map((message)=>displayMessage(message))
 });
 
 // when disconnected from server

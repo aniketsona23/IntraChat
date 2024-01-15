@@ -1,18 +1,18 @@
 const socketIO = require("socket.io");
-const mongoose = require("mongoose");
 const User = require("../modals/userSchema");
 let allUsers = {};
-const d = new Date();
 
 function socketHandle(server) {
+
   io = socketIO(server);
+
   // make connection with user from server side
   io.on("connection", (socket) => {
     const userid = socket.id;
     let username = "";
 
     // Registering new User
-    socket.on("register", (newusername) => {
+    socket.on("register", async(newusername) => {
       username = newusername;
       allUsers[username] = userid;
 
@@ -24,34 +24,45 @@ function socketHandle(server) {
         Object.keys(allUsers),
         `${username} Connected to Server !`
       );
+      
+      // Send Old Messages data to new User
+      const user = await User.findOne({username:username})
+      io.to(userid).emit("fromServer",user.messages)
 
+      //Send new user list of already connected users
       socket.emit(
         "updateUser",
         Object.keys(allUsers),
         "Welcome to IntraChat !"
       );
+
     });
 
     // listen for message from user
     socket.on("fromUser", async (newMessage) => {
+
       const recipentName = newMessage.to;
       const recipentSocketId = allUsers[recipentName];
-      let user2toUpdate = await User.findOne({username:newMessage.from})
-      user2toUpdate.messages.fromMe.push({
+
+      // Add new message to sending user database
+      let sendingUserUpdate = await User.findOne({username:username})
+      sendingUserUpdate.messages.push({
+        from:username,
         to: newMessage.to,
         msg: newMessage.msg,
-        time: d.getTime(),
       })
-      let user1toUpdate = await User.findOne({ username: recipentName });
-      user1toUpdate.messages.toMe.push({
-        from: newMessage.from,
+
+      // Add new message to receiving  user database
+      let receivingUserUpdate = await User.findOne({ username: recipentName });
+      receivingUserUpdate.messages.push({
+        from: username,
+        to : newMessage.to,
         msg: newMessage.msg,
-        time: d.getTime(),
       });
-      const re1 = await User.updateOne({username:recipentName},user1toUpdate)
-      const re2 = await User.updateOne({username:newMessage.from},user2toUpdate)
-      console.log(re1,re2)
-      io.to(recipentSocketId).emit("fromServer", newMessage);
+      const receRes = await User.updateOne({username:recipentName},receivingUserUpdate)
+      const sendRes = await User.updateOne({username:username},sendingUserUpdate)
+    
+      io.to(recipentSocketId).emit("fromServer", [newMessage]);
     });
 
     // when server disconnects from user
