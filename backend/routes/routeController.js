@@ -25,15 +25,20 @@ async function loginHandler(req,res){
 
 async function registerHandler(req,res){
     const {username, password}= req.body
-    const users = await User.create({username,password})
-    
-    if (!users ){
-        res.status(404).send(`<h1>Registration Failed</h1><a href="http://localhost:3010/">Go back to login</a>`)
+    const check = await User.find({username:username})
+    if (!check.length){
+        const users = await User.create({username,password})
+        if (!users ){
+            res.status(404).send(`<h1>Registration Failed</h1><a href="http://localhost:3010/">Go back to login</a>`)
+        }
+        else{
+            res.redirect(`/`)
+        }    
     }
-    
     else{
-        res.redirect(`/`)
+        res.status(200).send(`<h1>Username Already Exists</h1><a href="http://localhost:3010/">Go back to login</a>`)
     }
+    
 }
 
 module.exports = {loginPage ,loginHandler , chatPage,registerHandler}

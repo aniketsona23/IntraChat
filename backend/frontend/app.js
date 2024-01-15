@@ -1,8 +1,7 @@
 
 const socket = io();
-console.log("hello")
+
 const urlParams = new URLSearchParams(window.location.search);
-console.log(urlParams,"hello")
 const activeUsername = urlParams.get("username");
 
 let otherUsersNames = [];

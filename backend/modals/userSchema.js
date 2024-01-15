@@ -10,7 +10,10 @@ const userSchema = new Schema({
     type: String,
     required: true,
   },
- 
+  messages:{
+    fromMe:Array,
+    toMe:Array
+  }
 });
 
 module.exports = mongoose.model("User", userSchema,"user");
