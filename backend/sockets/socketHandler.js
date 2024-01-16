@@ -43,26 +43,29 @@ function socketHandle(server) {
 
       const recipentName = newMessage.to;
       const recipentSocketId = allUsers[recipentName];
-
-      // Add new message to sending user database
-      let sendingUserUpdate = await User.findOne({username:username})
-      sendingUserUpdate.messages.push({
-        from:username,
-        to: newMessage.to,
-        msg: newMessage.msg,
-      })
-
-      // Add new message to receiving  user database
-      let receivingUserUpdate = await User.findOne({ username: recipentName });
-      receivingUserUpdate.messages.push({
-        from: username,
-        to : newMessage.to,
-        msg: newMessage.msg,
-      });
-      const receRes = await User.updateOne({username:recipentName},receivingUserUpdate)
-      const sendRes = await User.updateOne({username:username},sendingUserUpdate)
-    
-      io.to(recipentSocketId).emit("fromServer", [newMessage]);
+      try{
+        // Add new message to sending user database
+        let sendingUserUpdate = await User.findOne({username:username})
+        sendingUserUpdate.messages.push({
+          from:username,
+          to: newMessage.to,
+          msg: newMessage.msg,
+        })
+  
+        // Add new message to receiving  user database
+        let receivingUserUpdate = await User.findOne({ username: recipentName });
+        receivingUserUpdate.messages.push({
+          from: username,
+          to : newMessage.to,
+          msg: newMessage.msg,
+        });
+        const receRes = await User.updateOne({username:recipentName},receivingUserUpdate)
+        const sendRes = await User.updateOne({username:username},sendingUserUpdate)
+      
+        io.to(recipentSocketId).emit("fromServer", [newMessage]);
+      }  catch(err){
+        console.log("[-] Error : "+err)
+      }
     });
 
     // when server disconnects from user

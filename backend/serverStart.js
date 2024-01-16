@@ -10,7 +10,7 @@ function startServer(server){
             console.log("Server started at http://localhost:"+port);
         })
     }).catch((err)=>{
-        console.log(`[-] Error : ${err} `)
+        console.log(`[-] Error (Couldn't connect to Database) : ${err} `)
     })
 }
 module.exports= startServer

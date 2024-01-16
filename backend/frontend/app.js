@@ -5,12 +5,13 @@ const activeUsername = urlParams.get("username");
 
 let otherUsersNames = [];
 let usersDisplayList = [];
+let messagesList = [];
 
 const messagesDisplay = document.getElementById("messages");
 const userDisplayContainer = document.getElementById("users");
 
 // function to delete all radio buttons
-function deleteOptions() {
+function deleteUserOptions() {
   usersDisplayList.forEach((element) => {
     userDisplayContainer.removeChild(element);
   });
@@ -18,7 +19,7 @@ function deleteOptions() {
 }
 
 // function to create radio buttons for active users
-function addOptions(userslist) {
+function addUserOptions(userslist) {
   userslist.forEach((user)=> {
     const tempContainer = document.createElement("div");
     const rads = document.createElement("input");
@@ -26,6 +27,7 @@ function addOptions(userslist) {
     rads.setAttribute("name", "client");
     rads.setAttribute("id", user);
     rads.setAttribute("value", user);
+    rads.setAttribute("onfocus",`displayChat(${user})`)
     
     const labels = document.createElement("label");
     labels.setAttribute("class", "clientlabel");
@@ -40,7 +42,9 @@ function addOptions(userslist) {
     usersDisplayList.push(tempContainer);
   })
   if (usersDisplayList.length) {
-    document.getElementsByName("client")[0].checked = true;// Check the first radio button
+    const firstRadio = document.getElementsByName("client")[0]
+    firstRadio.checked = true;// Check the first radio button
+    displayChat(firstRadio)
   }
 }
 
@@ -50,9 +54,17 @@ function updateOptions(userslist) {
     let userindex = userslist.indexOf(activeUsername);
     userslist.splice(userindex, 1);
   }
-  deleteOptions();
-  addOptions(userslist);
+  deleteUserOptions();
+  addUserOptions(userslist);
 }
+
+function deleteMessages(){
+  let dmessages = document.getElementsByClassName("message")
+  dmessages = [...dmessages]
+  
+  dmessages.forEach((dmsg)=>dmsg.remove())
+}
+
 
 // Function to send Message
 function sendMessage() {
@@ -64,6 +76,7 @@ function sendMessage() {
     msg: messageBox.value,
   }
   socket.emit("fromUser", msg);
+  messagesList.push(msg)
   displayMessage(msg)
 
   messageBox.value = "";
@@ -72,20 +85,27 @@ function sendMessage() {
 // Display message on website
 function displayMessage(message){
   const newmsg = document.createElement("li");
-
   
   if (message.to === activeUsername ){// Display as incoming messages
-    newmsg.setAttribute("class","to-user")
-    newmsg.innerHTML = `${message.from} : ${message.msg}`;
+    newmsg.setAttribute("class","message to-user")
+    newmsg.innerHTML = message.msg
   }
   
   else {// Display as outgoing messages
-    newmsg.setAttribute("class","from-user")
-    newmsg.innerHTML = `${message.msg} > ${message.to}`;
+    newmsg.setAttribute("class","message from-user")
+    newmsg.innerHTML = message.msg
   }
     messagesDisplay.appendChild(newmsg);
 }
 
+function displayChat(e){
+  deleteMessages()
+  const requiredChat = messagesList.filter((message)=>{
+    if (e.value === message.from || e.value === message.to)
+      return message
+  })
+  requiredChat.map((message)=>displayMessage(message))
+}
 
 // connection with server
 socket.on("connect", function () {
@@ -107,7 +127,8 @@ socket.on("updateUser", function (usersList, msg) {
 
 // message listener from server
 socket.on("fromServer", function(messages){
-  if (messages.length)
+  messagesList.push(...messages)
+  if (messages.length && usersDisplayList.length)
     messages.map((message)=>displayMessage(message))
 });
 

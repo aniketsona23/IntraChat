@@ -11,15 +11,19 @@ function chatPage(req,res){
 
 async function loginHandler(req,res){
     const {username,password} =req.body
-    const users = await User.findOne({username:username})
+    try{
+        const users = await User.findOne({username:username})
+        if (!users || users.password !=password){
+            res.status(404).send(`<h1>Invalid Username or Password</h1><a href="/">Go back to login</a>`)
+        }
+        
+        else{
+            res.redirect(`/chat/?username=${username}`)
+        }
+    }catch(err){
+        console.log("[-] Error  : "+err)
+    }
   
-    if (!users || users.password !=password){
-        res.status(404).send(`<h1>Invalid Username or Password</h1><a href="/">Go back to login</a>`)
-    }
-    
-    else{
-        res.redirect(`/chat/?username=${username}`)
-    }
 }
 
 async function registerHandler(req,res){
