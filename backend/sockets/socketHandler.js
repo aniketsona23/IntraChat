@@ -48,10 +48,10 @@ function socketHandle(server) {
 
       try{
         // Add new message to sending user database
-        const sendingUserUpdate = await User.findOneAndUpdate({username},{$push:{messages:newMessage}})
-
+        const sendingUserUpdate = await User.findOneAndUpdate({username : username},{$push:{messages:newMessage}})
+        
         // Add new message to receiving  user database
-        const receivingUserUpdate = await User.findOneAndUpdate({ username},{$push:{messages:newMessage}});
+        const receivingUserUpdate = await User.findOneAndUpdate({ username :recipentName},{$push:{messages:newMessage}});
       
         io.to(recipentSocketId).emit("fromServer", [newMessage]);
       }  
