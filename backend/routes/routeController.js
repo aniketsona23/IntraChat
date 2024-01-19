@@ -1,48 +1,64 @@
-const path = require("path")
-const User = require("../modals/userSchema")
+const path = require("path");
+const User = require("../modals/userSchema");
+const bcrypt = require("bcrypt");
 
-function loginPage(req,res){
-    res.sendFile(path.join(__dirname, "../frontend/login.html"));
+function loginPage(req, res) {
+  res.sendFile(path.join(__dirname, "../frontend/login.html"));
 }
 
-function chatPage(req,res){
-    res.sendFile(path.join(__dirname,"../frontend/client.html"))
+function chatPage(req, res) {
+  res.sendFile(path.join(__dirname, "../frontend/client.html"));
 }
 
-async function loginHandler(req,res){
-    const {username,password} =req.body
-    try{
-        const users = await User.findOne({username:username})
-        if (!users || users.password !=password){
-            res.status(404).send(`<h1>Invalid Username or Password</h1><a href="/">Go back to login</a>`)
-        }
-        
-        else{
-            res.redirect(`/chat/?username=${username}`)
-        }
-    }catch(err){
-        console.log("[-] Error  : "+err)
+async function checkPassword(enteredPass, realPass) {
+  const result = await bcrypt.compare(enteredPass,realPass)
+  return result;
+}
+
+
+async function loginHandler(req, res) {
+  const { username, password } = req.body;
+  try {
+    
+    const users = await User.findOne({ username: username });
+    if (users && await checkPassword(password,users.password)) { 
+      res.status(200).redirect(`/chat/?username=${username}`);
     }
-  
+    else {
+      res
+        .status(401)
+        .send(
+          `<h1>Invalid Username or Password</h1><a href="/">Go back to login</a>`
+        );
+    }
+
+  } catch (err) {
+    res.status(500).send("[-] Login Error  : " + err)
+  }
 }
 
-async function registerHandler(req,res){
-    const {username, password}= req.body
-    const check = await User.findOne({username:username})
+async function registerHandler(req, res) {
+  const { username, password } = req.body;
 
-    if (!check){
-        const users = await User.create({username,password})
-        if (!users ){
-            res.status(404).send(`<h1>Registration Failed</h1><a href="http://localhost:3010/">Go back to login</a>`)
-        }
-        else{
-            res.redirect(`/`)
-        }    
+  try{
+
+    const checkExists = await User.findOne({ username: username });
+  
+    if (checkExists){
+      console.log("Username already Exists")
+      res.status(409).send(`<h1>Username Already Exists</h1><a href="http://localhost:3010/">Go back to login</a>`)
     }
     else{
-        res.status(200).send(`<h1>Username Already Exists</h1><a href="http://localhost:3010/">Go back to login</a>`)
+      const hashPass = await bcrypt.hash(password,10);
+      await User.create({ username: username, password: hashPass });
+      res.redirect(`/`);
     }
-    
-}
 
-module.exports = {loginPage ,loginHandler , chatPage,registerHandler}
+  }catch(err){
+    console.log("Registration Failed : "+err)
+    res.status(500).send("Registration failed: "+err)
+  }
+}
+  
+
+module.exports = { loginPage, loginHandler, chatPage, registerHandler };
