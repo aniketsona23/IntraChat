@@ -9,7 +9,12 @@ let messagesList = [];
 
 const messagesDisplay = document.getElementById("messages");
 const userDisplayContainer = document.getElementById("users");
+const form = document.getElementById("form")
 
+form.addEventListener("submit",(e)=>{
+  e.preventDefault()
+  sendMessage()
+})
 // function to delete all radio buttons
 function deleteUserOptions() {
   usersDisplayList.forEach((element) => {
@@ -27,7 +32,6 @@ function addUserOptions(userslist) {
     rads.setAttribute("name", "client");
     rads.setAttribute("id", user);
     rads.setAttribute("value", user);
-    rads.setAttribute("onfocus",`displayChat(${user})`)
     
     const labels = document.createElement("label");
     labels.setAttribute("class", "clientlabel");
@@ -40,6 +44,12 @@ function addUserOptions(userslist) {
 
     userDisplayContainer.appendChild(tempContainer);
     usersDisplayList.push(tempContainer);
+  })
+
+  userDisplayContainer.addEventListener("click",function(event){
+    if(event.target.type === "radio"){
+      displayChat(event.target)
+    }
   })
   if (usersDisplayList.length) {
     const firstRadio = document.getElementsByName("client")[0]
@@ -98,10 +108,10 @@ function displayMessage(message){
     messagesDisplay.appendChild(newmsg);
 }
 
-function displayChat(e){
+function displayChat(selectedUser){
   deleteMessages()
   const requiredChat = messagesList.filter((message)=>{
-    if (e.value === message.from || e.value === message.to)
+    if (selectedUser.value === message.from || selectedUser.value === message.to)
       return message
   })
   requiredChat.map((message)=>displayMessage(message))

@@ -15,7 +15,6 @@ async function checkPassword(enteredPass, realPass) {
   return result;
 }
 
-
 async function loginHandler(req, res) {
   const { username, password } = req.body;
   try {
@@ -49,8 +48,7 @@ async function registerHandler(req, res) {
       res.status(409).send(`<h1>Username Already Exists</h1><a href="http://localhost:3010/">Go back to login</a>`)
     }
     else{
-      const hashPass = await bcrypt.hash(password,10);
-      await User.create({ username: username, password: hashPass });
+      await User.create({ username,password });
       res.redirect(`/`);
     }
 

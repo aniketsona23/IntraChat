@@ -1,6 +1,7 @@
 const socketIO = require("socket.io");
 const User = require("../modals/userSchema");
-let allUsers = {};
+
+const allUsers = {};
 
 function socketHandle(server) {
 
@@ -27,7 +28,8 @@ function socketHandle(server) {
       
       // Send Old Messages data to new User
       const user = await User.findOne({username:username})
-      io.to(userid).emit("fromServer",user.messages)
+      if (user.messages.length)
+        io.to(userid).emit("fromServer",user.messages)
 
       //Send new user list of already connected users
       socket.emit(
@@ -43,41 +45,31 @@ function socketHandle(server) {
 
       const recipentName = newMessage.to;
       const recipentSocketId = allUsers[recipentName];
+
       try{
         // Add new message to sending user database
-        let sendingUserUpdate = await User.findOne({username:username})
-        sendingUserUpdate.messages.push({
-          from:username,
-          to: newMessage.to,
-          msg: newMessage.msg,
-        })
-  
+        const sendingUserUpdate = await User.findOneAndUpdate({username},{$push:{messages:newMessage}})
+
         // Add new message to receiving  user database
-        let receivingUserUpdate = await User.findOne({ username: recipentName });
-        receivingUserUpdate.messages.push({
-          from: username,
-          to : newMessage.to,
-          msg: newMessage.msg,
-        });
-        const receRes = await User.updateOne({username:recipentName},receivingUserUpdate)
-        const sendRes = await User.updateOne({username:username},sendingUserUpdate)
+        const receivingUserUpdate = await User.findOneAndUpdate({ username},{$push:{messages:newMessage}});
       
         io.to(recipentSocketId).emit("fromServer", [newMessage]);
-      }  catch(err){
-        console.log("[-] Error : "+err)
+      }  
+      catch(err){
+        console.log("[-] Error while Sending Message  : "+err)
       }
     });
 
     // when server disconnects from user
     socket.on("disconnect", () => {
-      console.log("disconnected from " + username);
+      console.log("[-] Disconnected from " + username);
       delete allUsers[username];
 
       // Tell other users  user disconnected
       socket.broadcast.emit(
         "updateUser",
         Object.keys(allUsers),
-        `${username} disconnected !`
+        `[-] ${username} disconnected !`
       );
     });
   });

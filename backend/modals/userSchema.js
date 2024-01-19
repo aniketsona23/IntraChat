@@ -1,5 +1,6 @@
 const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
+const bcrypt = require("bcrypt")
 
 const userSchema = new Schema({
   username: {
@@ -9,6 +10,7 @@ const userSchema = new Schema({
   password: {
     type: String,
     required: true,
+    set: (password) =>bcrypt.hashSync(password,10)
   },
   messages:{
     type:Array
