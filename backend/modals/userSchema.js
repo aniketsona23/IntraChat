@@ -14,6 +14,11 @@ const userSchema = new Schema({
   },
   messages:{
     type:Array
+  },
+  connections:{
+    accepted:Array,
+    pending:Array,
+    blocked:Array
   }
 });
 

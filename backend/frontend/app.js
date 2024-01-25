@@ -75,6 +75,15 @@ function deleteMessages(){
   dmessages.forEach((dmsg)=>dmsg.remove())
 }
 
+// Function to search User
+async function searchUser(){
+  const toSearch = document.getElementById("search-user").value;
+  const response = await fetch(`http://localhost:3010/searchuser/${toSearch}`)
+
+  if (response.json().status === "found"){
+
+  }
+}
 
 // Function to send Message
 function sendMessage() {

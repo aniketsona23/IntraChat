@@ -10,6 +10,20 @@ function chatPage(req, res) {
   res.sendFile(path.join(__dirname, "../frontend/client.html"));
 }
 
+async function searchUser(req,res){
+  const toSearch = req.params.searchname;
+  const find = await User.findOne({username:toSearch})
+  
+  if (find){
+    console.log("[+] User Found !")
+    res.json({status:"found"})
+  }
+  else{
+    console.log("[-] User not Found !")
+    res.json({status:"Not Found"})
+  }
+}
+
 async function checkPassword(enteredPass, realPass) {
   const result = await bcrypt.compare(enteredPass,realPass)
   return result;
@@ -59,4 +73,4 @@ async function registerHandler(req, res) {
 }
   
 
-module.exports = { loginPage, loginHandler, chatPage, registerHandler };
+module.exports = { loginPage, loginHandler, chatPage, registerHandler ,searchUser};
