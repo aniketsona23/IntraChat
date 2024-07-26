@@ -7,7 +7,7 @@ const db_url = process.env.DB_URI;
 const { default: mongoose } = require("mongoose");
 
 const app = express();
-// const server = require("http").createServer(app);
+const server = require("http").createServer(app);
 app.use(
   cors({
     origin: "https://intra-chat.vercel.app",
@@ -30,7 +30,7 @@ try {
     .connect(db_url)
     .then(() => {
       console.log("[+] Connected to Database");
-      app.listen(port, () => {
+      server.listen(port, () => {
         console.log("[+] Server started at http://localhost:" + port);
       });
     })
@@ -41,4 +41,4 @@ try {
   console.log("[-] Server startup failed : " + err);
 }
 
-module.exports = serverless(app);
+// module.exports = serverless(app);
