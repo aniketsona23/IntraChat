@@ -1,1 +1,18 @@
-{ "version": 2, "rewrites": [{ "source": "/(.*)", "destination": "/api" }] }
+{
+  "version": 2,
+  "builds": [
+    {
+      "src": "/api/index.js",
+      "use": "@vercel/node"
+    },
+    {
+      "src": "/public/**",
+      "use": "@vercel/static"
+    }
+  ],
+  "rewrites": [
+    { "source": "/", "destination": "/public/login.html" },
+    { "source": "/chat/**", "destination": "/public/client.html" },
+    { "source": "/api/", "destination": "/api" }
+  ]
+}

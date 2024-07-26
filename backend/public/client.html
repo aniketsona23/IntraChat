@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta name="viewport" content="width=device-width,initial-scale=1.0" />
+    <title>Intrachat</title>
+    <link rel="stylesheet" type = "text/css" href="/client.css" />
+    <link rel="shortcut icon" href="#">
+    <meta charset="UTF-8">
+  </head>
+  <body>
+    
+    <nav>
+      <div class="left-section">
+        <h1>IntraChat</h1>
+      </div>
+      <div class="right-section">
+        <div class="search-box">
+          <input type="text" placeholder="Enter Username" id="search-user" name="searchname" id="searchname">
+          <button id="search-btn" onclick="searchUser()">Send Friendship</button>
+        </div>
+      </div>
+    </nav>
+
+    <ul id="messages"></ul>
+    
+    <form id="form" action="" >
+    
+        <ul id="users">
+          <span>Users Active : </span>
+        </ul>
+    
+        <div id="msg-box">
+          <input id="input" autocomplete="off" required/>
+          <button id="sub">Send</button>
+        </div>
+    
+      </form>
+
+    <script src="https://cdn.socket.io/4.7.2/socket.io.min.js"></script>
+    <script src="/app.js"></script>
+  </body>
+</html>
+
+
