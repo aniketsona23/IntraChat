@@ -58,7 +58,7 @@ async function registerHandler(req, res) {
   
     if (checkExists){
       console.log("Username already Exists")
-      res.status(409).send(`<h1>Username Already Exists</h1><a href="http://localhost:3010/">Go back to login</a>`)
+      res.status(409).send(`<h1>Username Already Exists</h1><a href="https://intra-chat.vercel.app/">Go back to login</a>`)
     }
     else{
       await User.create({ username,password });

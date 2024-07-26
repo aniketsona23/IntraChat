@@ -13,7 +13,7 @@ const app = express();
 const server = http.createServer(app);
 const io = socketIO(server,{
     cors:{
-        origin:"http://127.0.0.1:5500",
+        origin:"https://intra-chat.vercel.app",
         methods:["GET","POST"]
     }
 });
@@ -21,7 +21,7 @@ socketHandle(io)
 
 
 app.use(cors({
-    origin:"http://127.0.0.1:5500"
+    origin:"https://intra-chat.vercel.app"
 }))
 app.use(express.json());
 app.use("/",router)
