@@ -7,6 +7,7 @@ const {
 } = require("./routeController");
 
 router.get("/",(req,res)=>{
+  console.log("hell")
   res.send("<h1>HEllo</h1>")
 })
 
