@@ -1,11 +1,17 @@
 {
-    "version": 2,
-    "builds": [
-      { "src": "api/index.js", "use": "@vercel/node" },
-      { "src": "api/public/**", "use": "@vercel/static" }
-    ],
-    "routes": [
-      { "src": "/(.*)", "dest": "/api/index.js" }
-    ]
-  }
-  
+  "version": 2,
+  "builds": [
+    { "src": "api/index.js", "use": "@vercel/node" },
+    { "src": "api/public/**", "use": "@vercel/static" }
+  ],
+  "routes": [
+    { "src": "/(.*)", "dest": "/api/index.js" },
+    {
+      "src": "/login",
+      "dest": "/api/public/login.html"
+    },{
+        "src":"/chat/(.*)",
+        "dest":"/api/public/client.html"
+    }
+  ]
+}
