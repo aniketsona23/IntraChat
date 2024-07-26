@@ -6,7 +6,7 @@
   ],
   "routes": [
     {
-      "src": "/login",
+      "src": "/",
       "dest": "/api/public/login.html"
     },
     {
