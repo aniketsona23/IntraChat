@@ -5,13 +5,14 @@
     { "src": "api/public/**", "use": "@vercel/static" }
   ],
   "routes": [
-    { "src": "/(.*)", "dest": "/api/index.js" },
     {
       "src": "/login",
       "dest": "/api/public/login.html"
-    },{
-        "src":"/chat/(.*)",
-        "dest":"/api/public/client.html"
-    }
+    },
+    {
+      "src": "/chat/(.*)",
+      "dest": "/api/public/client.html"
+    },
+    { "src": "/(.*)", "dest": "/api/index.js" }
   ]
 }
