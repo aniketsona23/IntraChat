@@ -1,4 +1,4 @@
-const User = require("../modals/userSchema");
+const User = require("../../modals/userSchema");
 
 const allUsers = {};
 
