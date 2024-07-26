@@ -4,6 +4,7 @@ const bcrypt = require("bcrypt");
 
 function loginPage(req, res) {
   res.sendFile(path.join(__dirname, "../public/login.html"));
+  // res.send("<h1>hello</h1>")
 }
 
 function chatPage(req, res) {
