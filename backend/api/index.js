@@ -2,12 +2,23 @@ require("dotenv").config();
 const express = require("express");
 const router = require("../routes/route");
 const cors = require("cors");
-const serverless = require("serverless-http");
+const socketIO = require("socket.io");
+// const serverless = require("serverless-http");
+const socketHandle = require("./sockets/socketHandler.js");
 const db_url = process.env.DB_URI;
 const { default: mongoose } = require("mongoose");
 
 const app = express();
 const server = require("http").createServer(app);
+const io = socketIO(server, {
+  cors: {
+    origin: "https://intra-chat.vercel.app",
+    methods: ["GET", "POST"],
+  },
+});
+
+socketHandle(io);
+
 app.use(
   cors({
     origin: "https://intra-chat.vercel.app",
@@ -15,12 +26,6 @@ app.use(
 );
 
 app.use(express.json());
-
-app.get("/", (req, res) => {
-  console.log("Hello");
-  res.send("<h1>Hello World</h1>");
-});
-
 app.use("/api", router);
 
 const port = process.env.PORT || 3000;
