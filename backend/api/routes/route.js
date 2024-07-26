@@ -7,7 +7,7 @@ const {
 } = require("./routeController");
 
 router.get("/",(req,res)=>{
-  res.json({msg:"hello"})
+  res.send("<h1>HEllo</h1>")
 })
 
 router.get("/api",(req,res)=>{
