@@ -31,5 +31,5 @@ app.get("/",(req,res)=>{
 })
 
 module.exports= serverless(app);
-
+console.log("Hello")
 startServer(server)
