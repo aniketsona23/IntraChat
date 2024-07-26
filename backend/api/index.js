@@ -11,26 +11,26 @@ const startServer = require("./serverStart.js");
 
 const app = express();
 const server = http.createServer(app);
-const io = socketIO(server, {
-  cors: {
-    origin: "https://intra-chat.vercel.app",
-    methods: ["GET", "POST"],
-  },
-});
-socketHandle(io);
+// const io = socketIO(server, {
+//   cors: {
+//     origin: "https://intra-chat.vercel.app",
+//     methods: ["GET", "POST"],
+//   },
+// });
 
-app.use(
-  cors({
-    origin: "https://intra-chat.vercel.app",
-  })
-);
+// app.use(
+//     cors({
+//     origin: "https://intra-chat.vercel.app",
+// })
+// );
 app.use(express.json());
 app.use("/api", router);
 
 app.get("/", (req, res) => {
-  console.log("Hello1");
-  res.send("<h1>Nigga why</h1>").status(200);
+    console.log("Hello1");
+    res.send("<h1>Nigga why</h1>").status(200);
 });
+// socketHandle(io);
 
 module.exports = serverless(app);
-startServer(server);
+// startServer(server);
