@@ -1,4 +1,4 @@
-const socket = io("https://intra-chat.vercel.app");
+const socket = io("https://intra-chat-api.vercel.app");
 const urlParams = new URLSearchParams(window.location.search);
 const activeUsername = urlParams.get("username");
 
@@ -77,7 +77,7 @@ function deleteMessages() {
 // Function to search User
 async function searchUser() {
   const toSearch = document.getElementById("search-user").value;
-  const response = await fetch(`https://intra-chat.vercel.app/searchuser/${toSearch}`);
+  const response = await fetch(`https://intra-chat-api.vercel.app/searchuser/${toSearch}`);
 
   if (response.json().status === "found") {
   }
