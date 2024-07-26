@@ -7,7 +7,7 @@ const db_url = process.env.DB_URI;
 const { default: mongoose } = require("mongoose");
 
 const app = express();
-const server = require("http").createServer(app);
+// const server = require("http").createServer(app);
 app.use(
   cors({
     origin: "https://intra-chat.vercel.app",
@@ -25,20 +25,20 @@ app.use("/api", router);
 
 const port = process.env.PORT || 3000;
 
-// try {
-//   mongoose
-//     .connect(db_url)
-//     .then(() => {
-//       console.log("[+] Connected to Database");
-//       server.listen(port, () => {
-//         console.log("[+] Server started at http://localhost:" + port);
-//       });
-//     })
-//     .catch((err) => {
-//       console.log("[-] Failed to connect to DataBase : " + err);
-//     });
-// } catch (err) {
-//   console.log("[-] Server startup failed : " + err);
-// }
+try {
+  mongoose
+    .connect(db_url)
+    .then(() => {
+      console.log("[+] Connected to Database");
+      app.listen(port, () => {
+        console.log("[+] Server started at http://localhost:" + port);
+      });
+    })
+    .catch((err) => {
+      console.log("[-] Failed to connect to DataBase : " + err);
+    });
+} catch (err) {
+  console.log("[-] Server startup failed : " + err);
+}
 
-module.exports = serverless(app);
+// module.exports = serverless(app);
