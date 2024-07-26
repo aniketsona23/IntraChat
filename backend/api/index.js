@@ -1,5 +1,6 @@
 require("dotenv").config();
 const express = require("express");
+const router  = require("../routes/route")
 const cors = require("cors");
 
 const app = express();
@@ -14,6 +15,8 @@ app.get("/", (req, res) => {
   console.log("Hello");
   res.send("<h1>Hello World</h1>");
 });
+
+app.use("/api",router)
 
 const port = process.env.PORT || 3000;
 app.listen(port, () => {
