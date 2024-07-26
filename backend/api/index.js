@@ -28,7 +28,7 @@ app.use(express.json());
 app.use("/api", router);
 
 app.get("/", (req, res) => {
-  console.log("Hello");
+  console.log("Hello1");
   res.send("<h1>Nigga why</h1>");
 });
 
