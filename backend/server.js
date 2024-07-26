@@ -6,7 +6,7 @@ const serverless = require("serverless-http")
 const http = require("http")
 const path = require("path");
 const router = require("./routes/route.js");
-const socketHandle = require("./sockets/socketHandler.js")
+const socketHandle = require("./api/sockets/socketHandler.js")
 const startServer = require("./serverStart.js");
 const bodyParser = require("body-parser")
 

@@ -1,5 +1,5 @@
 const socketIO = require("socket.io");
-const User = require("../modals/userSchema");
+const User = require("../../modals/userSchema");
 
 const allUsers = {};
 
