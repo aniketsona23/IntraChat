@@ -16,7 +16,7 @@ const io = socketHandle(server);
 
 app.use("/",router)
 app.use(bodyParser.urlencoded({ extended: true }));
-app.use(express.static(path.join(__dirname, "/public")));
+app.use(express.static(path.join(__dirname, "../public")));
 
 
 module.exports= serverless(app);
