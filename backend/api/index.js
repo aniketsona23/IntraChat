@@ -41,4 +41,4 @@ try {
   console.log("[-] Server startup failed : " + err);
 }
 
-// module.exports = serverless(app);
+module.exports = serverless(app);
