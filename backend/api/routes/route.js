@@ -6,6 +6,10 @@ const {
   searchUser,
 } = require("./routeController");
 
+router.get("/",(req,res)=>{
+  res.json({msg:"hello"})
+})
+
 router.get("/api",(req,res)=>{
   res.json({msg:"hellooo"})
 })
