@@ -3,7 +3,6 @@ const User = require("../modals/userSchema");
 const bcrypt = require("bcrypt");
 
 function loginPage(req, res) {
-  console.log("hello nigger")
   res.sendFile(path.join(__dirname, "../public/login.html"));
 }
 
