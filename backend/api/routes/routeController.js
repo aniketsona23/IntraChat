@@ -3,11 +3,11 @@ const User = require("../modals/userSchema");
 const bcrypt = require("bcrypt");
 
 function loginPage(req, res) {
-  res.sendFile(path.join(__dirname, "../frontend/login.html"));
+  res.sendFile(path.join(__dirname, "../public/login.html"));
 }
 
 function chatPage(req, res) {
-  res.sendFile(path.join(__dirname, "../frontend/client.html"));
+  res.sendFile(path.join(__dirname, "../public/client.html"));
 }
 
 async function searchUser(req,res){
