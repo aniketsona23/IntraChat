@@ -1,22 +1,30 @@
 require("dotenv").config();
+const socketIO = require("socket.io");
 
-
+const cors = require('cors')
 const express = require("express")
 const serverless = require("serverless-http")
 const http = require("http")
-const path = require("path");
 const router = require("./routes/route.js");
 const socketHandle = require("./sockets/socketHandler.js")
 const startServer = require("./serverStart.js");
-const bodyParser = require("body-parser")
 
 const app = express();
 const server = http.createServer(app);
-const io = socketHandle(server);
+const io = socketIO(server,{
+    cors:{
+        origin:"http://127.0.0.1:5500",
+        methods:["GET","POST"]
+    }
+});
+socketHandle(io)
 
-app.use(express.urlencoded({ extended: true }));
+
+app.use(cors({
+    origin:"http://127.0.0.1:5500"
+}))
+app.use(express.json());
 app.use("/",router)
-app.use(express.static(path.join(__dirname, "/public")));
 
 
 module.exports= serverless(app);

@@ -2,14 +2,6 @@ const path = require("path");
 const User = require("../modals/userSchema");
 const bcrypt = require("bcrypt");
 
-function loginPage(req, res) {
-  res.sendFile(path.join(__dirname, "../public/login.html"));
-  // res.send("<h1>hello</h1>")
-}
-
-function chatPage(req, res) {
-  res.sendFile(path.join(__dirname, "../public/client.html"));
-}
 
 async function searchUser(req,res){
   const toSearch = req.params.searchname;
@@ -31,13 +23,18 @@ async function checkPassword(enteredPass, realPass) {
 }
 
 async function loginHandler(req, res) {
-  console.log("hello")
   const { username, password } = req.body;
+  console.log(req.body)
   try {
     
     const users = await User.findOne({ username: username });
     if (users && await checkPassword(password,users.password)) { 
-      res.status(200).redirect(`/chat/?username=${username}`);
+      console.log("bhej rah hun")
+      res.json({
+        status:true,
+        msg:"Login Successfully"
+      })
+      console.log("bhej diya bhiya !")
     }
     else {
       res
@@ -75,4 +72,4 @@ async function registerHandler(req, res) {
 }
   
 
-module.exports = { loginPage, loginHandler, chatPage, registerHandler ,searchUser};
+module.exports = { loginHandler,  registerHandler ,searchUser};

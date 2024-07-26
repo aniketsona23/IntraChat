@@ -1,11 +1,10 @@
-const socketIO = require("socket.io");
 const User = require("../modals/userSchema");
 
 const allUsers = {};
 
-function socketHandle(server) {
+function socketHandle(io) {
 
-  io = socketIO(server);
+  // io = socketIO(server);
 
   // make connection with user from server side
   io.on("connection", (socket) => {
