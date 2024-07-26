@@ -1,0 +1,24 @@
+require("dotenv").config();
+
+
+const express = require("express")
+const serverless = require("serverless-http")
+const http = require("http")
+const path = require("path");
+const router = require("./routes/route.js");
+const socketHandle = require("./api/sockets/socketHandler.js")
+const startServer = require("./serverStart.js");
+const bodyParser = require("body-parser")
+
+const app = express();
+const server = http.createServer(app);
+const io = socketHandle(server);
+
+app.use(bodyParser.urlencoded({ extended: true }));
+app.use(express.static(path.join(__dirname, "/frontend")));
+app.use("/",router)
+
+
+module.exports= serverless(app);
+
+startServer(server)
