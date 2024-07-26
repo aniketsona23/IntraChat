@@ -29,7 +29,7 @@ app.use("/api", router);
 
 app.get("/", (req, res) => {
   console.log("Hello1");
-  res.send("<h1>Nigga why</h1>");
+  res.send("<h1>Nigga why</h1>").status(200);
 });
 
 module.exports = serverless(app);
