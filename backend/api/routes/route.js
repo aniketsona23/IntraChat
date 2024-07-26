@@ -6,8 +6,8 @@ router.get("/", loginPage);
 
 router.get("/chat/",(chatPage))
 
-router.post("/api/login",loginHandler)
-router.post("/api/register",registerHandler)
+router.post("/login",loginHandler)
+router.post("/register",registerHandler)
 router.get("/searchuser/:searchname",searchUser)
 
 module.exports = router
