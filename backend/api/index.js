@@ -14,9 +14,9 @@ const app = express();
 const server = http.createServer(app);
 const io = socketHandle(server);
 
+app.use("/",router)
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(express.static(path.join(__dirname, "/public")));
-app.use("/",router)
 
 
 module.exports= serverless(app);
