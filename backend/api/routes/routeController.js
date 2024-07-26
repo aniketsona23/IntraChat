@@ -23,6 +23,7 @@ async function checkPassword(enteredPass, realPass) {
 }
 
 async function loginHandler(req, res) {
+  console.log("hello")
   const { username, password } = req.body;
   console.log(req.body)
   try {
