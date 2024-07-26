@@ -1,5 +1,7 @@
 backend/node_modules
 backend/.env
+frontend/.env
+
 backend/config.json
 backend/server.js
 backend/serverStart.js

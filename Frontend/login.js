@@ -6,7 +6,7 @@ loginForm.addEventListener("submit", async (e) => {
   
   const username = document.querySelector("#username");
   const password = document.querySelector("#password");
-  const response = await fetch("http://localhost:3010/api/login", {
+  const response = await fetch("https://intra-chat.vercel.app/api/login", {
     method: "POST",
     body: JSON.stringify({ username: username.value, password: password.value }),
     headers: {
