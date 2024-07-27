@@ -12,7 +12,8 @@ const app = express();
 const server = require("http").createServer(app);
 const io = socketIO(server, {
   cors: {
-    origin: "https://intra-chat.vercel.app"
+    origin: "https://intra-chat.vercel.app",
+    methods:["GET","POST"]
   },
 });
 
