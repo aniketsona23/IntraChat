@@ -20,6 +20,6 @@ loginForm.addEventListener("submit", async (e) => {
 
   if (response.status == 200) {
     window.location.href =
-      "https://www.intra-chat.vercel.app/chat/?username=" + username.value;
+      "https://intra-chat.vercel.app/chat/?username=" + username.value;
   }
 });
