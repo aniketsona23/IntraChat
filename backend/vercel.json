@@ -3,6 +3,8 @@
   "builds": [{ "src": "/api/index.js", "use": "@vercel/node" }],
   "routes": [
     { "src": "/(.*)", "dest": "/api/index.js" },
-    {"src":"/","dest":"/index.js"}
+    {"src":"/","dest":"/index.js"},
+    {"src":"/css/(.*)","dest":"/public/css"},
+    {"src":"/js/(.*)","dest":"/public/js"}
   ]
 }
