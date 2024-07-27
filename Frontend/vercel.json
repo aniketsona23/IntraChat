@@ -14,6 +14,16 @@
       "methods": ["GET"],
       "dest": "/public/css/$1"
     },
+    {
+      "src": "/chat/css/(.*)",
+      "methods": ["GET"],
+      "dest": "/public/css/$1"
+    },
+    {
+      "src": "/chat/js/(.*)",
+      "methods": ["GET"],
+      "dest": "/public/js/$1"
+    },
     { "src": "/media/(.*)", "methods": ["GET"], "dest": "/public/media/$1" }
   ]
 }
